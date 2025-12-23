@@ -57,10 +57,10 @@ export default function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       nextSlide();
-    }, 5000);
+    }, 7000);
 
     return () => clearInterval(timer);
-  }, [nextSlide]);
+  }, [currentSlide, nextSlide]);
 
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black">
@@ -99,9 +99,17 @@ export default function Home() {
               <button 
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`${currentSlide === index ? "bg-white text-black px-4 py-2 -my-2" : "hover:text-white transition-colors py-2"}`}
+                className={`relative py-2 transition-colors ${currentSlide === index ? "text-white" : "hover:text-white"}`}
               >
                 {slide.category}
+                {currentSlide === index && (
+                  <motion.div
+                    className="absolute bottom-0 left-0 h-[1px] bg-white"
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 7, ease: "linear" }}
+                  />
+                )}
               </button>
             ))}
          </div>
