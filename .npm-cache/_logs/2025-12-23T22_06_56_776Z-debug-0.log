@@ -1,0 +1,37 @@
+0 verbose cli /usr/local/bin/node /usr/local/bin/npm
+1 info using npm@11.6.2
+2 info using node@v24.11.1
+3 silly config load:file:/usr/local/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/flayer/dpmp/.npmrc
+5 silly config load:file:/Users/flayer/.npmrc
+6 silly config load:file:/usr/local/etc/npmrc
+7 verbose title npm install lucide-react
+8 verbose argv "install" "lucide-react"
+9 verbose logfile logs-max:10 dir:/Users/flayer/dpmp/.npm-cache/_logs/2025-12-23T22_06_56_776Z-
+10 verbose logfile /Users/flayer/dpmp/.npm-cache/_logs/2025-12-23T22_06_56_776Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+13 silly idealTree buildDeps
+14 silly fetch manifest lucide-react@*
+15 silly packumentCache full:https://registry.npmjs.org/lucide-react cache-miss
+16 http fetch GET 200 https://registry.npmjs.org/lucide-react 177ms (cache miss)
+17 silly packumentCache full:https://registry.npmjs.org/lucide-react set size:undefined disposed:false
+18 silly fetch manifest react@^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+19 silly packumentCache full:https://registry.npmjs.org/react cache-miss
+20 http fetch GET 200 https://registry.npmjs.org/react 50ms (cache revalidated)
+21 silly packumentCache full:https://registry.npmjs.org/react set size:6362607 disposed:false
+22 silly placeDep ROOT lucide-react@0.562.0 OK for:  want: *
+23 silly placeDep ROOT react@19.2.3 OK for: lucide-react@0.562.0 want: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+24 silly reify moves {}
+25 http cache react@https://registry.npmjs.org/react/-/react-19.2.3.tgz 0ms (cache hit)
+26 http cache lucide-react@https://registry.npmjs.org/lucide-react/-/lucide-react-0.562.0.tgz 0ms (cache hit)
+27 silly tarball no local data for lucide-react@https://registry.npmjs.org/lucide-react/-/lucide-react-0.562.0.tgz. Extracting by manifest.
+28 http fetch GET 200 https://registry.npmjs.org/lucide-react/-/lucide-react-0.562.0.tgz 444ms (cache miss)
+29 silly ADD node_modules/react
+30 silly ADD node_modules/lucide-react
+31 verbose cwd /Users/flayer/dpmp
+32 verbose os Darwin 25.2.0
+33 verbose node v24.11.1
+34 verbose npm  v11.6.2
+35 verbose exit 0
+36 info ok
