@@ -1,8 +1,29 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Download, Share2, ChevronLeft, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView, animate } from "framer-motion";
+
+const Counter = ({ from, to, suffix = "" }: { from: number; to: number; suffix?: string }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (inView && ref.current) {
+      const node = ref.current;
+      const controls = animate(from, to, {
+        duration: 2,
+        ease: "easeOut",
+        onUpdate(value) {
+          node.textContent = Math.floor(value).toLocaleString("en-US") + suffix;
+        }
+      });
+      return () => controls.stop();
+    }
+  }, [from, to, suffix, inView]);
+
+  return <span ref={ref}>{from.toLocaleString("en-US")}{suffix}</span>;
+};
 
 const slides = [
   {
@@ -84,15 +105,15 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="relative h-screen flex flex-col items-center justify-center text-center px-6">
-        <h1 className="text-[12vw] leading-none font-thin tracking-[0.3em] text-white mt-10 select-none">
+        <h1 className="text-[12vw] leading-none font-thin tracking-[0.3em] text-white mt-8 select-none">
           STARLINK
         </h1>
-        <p className="mt-8 text-sm text-gray-500 tracking-wide max-w-md">
+        <p className="mt-6 text-sm text-gray-500 tracking-wide max-w-md">
           Decoy communication systems designed to improve infrastructure resilience
         </p>
         
         <div 
-          className="absolute bottom-12 flex flex-col items-center gap-2 cursor-pointer group"
+          className="absolute bottom-10 flex flex-col items-center gap-2 cursor-pointer group"
           onClick={() => scrollToSection("featured")}
         >
            <span className="text-[10px] uppercase tracking-widest text-gray-500 group-hover:text-white transition-colors">Learn more</span>
@@ -103,7 +124,7 @@ export default function Home() {
       {/* Slider Section (Resilient Communication Infrastructure) */}
       <section id="featured" className="min-h-screen bg-[#050505] px-6 md:px-12 py-12 flex flex-col relative">
          {/* Tabs */}
-         <div className="flex flex-wrap gap-8 mb-20 text-[11px] font-medium tracking-wide text-gray-500 uppercase border-b border-white/5 pb-4">
+         <div className="flex flex-wrap gap-8 mb-12 text-[11px] font-medium tracking-wide text-gray-500 uppercase border-b border-white/5 pb-4">
             {slides.map((slide, index) => (
               <button 
                 key={index}
@@ -124,7 +145,7 @@ export default function Home() {
          </div>
 
          <div className="flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full">
-            <div className="flex justify-between items-start mb-8">
+            <div className="flex justify-between items-start mb-6">
                <span className="text-[10px] tracking-[0.2em] text-gray-500 uppercase">FEATURED ANALYSIS</span>
                <div className="flex gap-2">
                   <button className="p-3 border border-white/10 hover:bg-white/5 transition-colors">
@@ -143,13 +164,13 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="mb-24"
+                className="mb-16"
               >
-                <h2 className="text-5xl md:text-8xl font-medium leading-tight mb-24 tracking-tight whitespace-pre-line">
+                <h2 className="text-5xl md:text-8xl font-medium leading-tight mb-16 tracking-tight whitespace-pre-line">
                    {slides[currentSlide].title}
                 </h2>
 
-                <div className="grid grid-cols-3 gap-12 border-t border-white/10 pt-8 max-w-2xl">
+                <div className="grid grid-cols-3 gap-8 border-t border-white/10 pt-8 max-w-2xl">
                    <div>
                       <p className="text-[10px] tracking-widest text-gray-500 uppercase mb-2">WRITTEN BY</p>
                       <p className="text-sm text-gray-300">{slides[currentSlide].author}</p>
@@ -176,8 +197,8 @@ export default function Home() {
       </section>
 
       {/* Mission Section */}
-      <section className="py-40 px-6 md:px-12 flex justify-center bg-black">
-        <div className="relative max-w-3xl text-center py-16 px-8">
+      <section className="py-32 px-6 md:px-12 flex justify-center bg-black">
+        <div className="relative max-w-3xl text-center py-12 px-8">
           {/* Brackets decoration */}
           <motion.div 
             animate={{ x: [0, 15, 0], y: [0, 15, 0] }}
@@ -207,14 +228,14 @@ export default function Home() {
       </section>
 
       {/* Specifications Section */}
-      <section id="architecture" className="py-20 px-6 md:px-12 bg-[#050505]">
-        <div className="text-center mb-32">
+      <section id="architecture" className="py-16 px-6 md:px-12 bg-[#050505]">
+        <div className="text-center mb-20">
           <h3 className="text-xl font-medium tracking-[0.1em] text-gray-500 uppercase">SPECIFICATIONS</h3>
         </div>
         
         <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto w-full">
           {/* Left Specs */}
-          <div className="space-y-24 text-left w-full md:w-1/4">
+          <div className="space-y-16 text-left w-full md:w-1/4">
              <div className="flex justify-between items-start group">
                <div>
                   <h4 className="text-sm text-gray-300 mb-2">Throughput</h4>
@@ -246,11 +267,11 @@ export default function Home() {
           </div>
 
           {/* Image Placeholder */}
-          <div className="relative w-full md:w-1/2 aspect-square md:aspect-[4/3] my-12 md:my-0 bg-zinc-800 rounded-lg">
+          <div className="relative w-full md:w-1/2 aspect-square md:aspect-[4/3] my-8 md:my-0 bg-zinc-800 rounded-lg">
           </div>
 
           {/* Right Specs (Mirrored layout as per screenshot) */}
-          <div className="space-y-24 text-right w-full md:w-1/4">
+          <div className="space-y-16 text-right w-full md:w-1/4">
              <div className="flex justify-between items-start flex-row-reverse group">
                <div>
                   <h4 className="text-sm text-gray-300 mb-2">Throughput</h4>
@@ -284,32 +305,32 @@ export default function Home() {
       </section>
 
       {/* Analytical Infrastructure */}
-      <section id="platform" className="py-32 px-6 md:px-12 bg-black">
-        <div className="grid md:grid-cols-2 gap-24 items-center max-w-7xl mx-auto">
+      <section id="platform" className="py-24 px-6 md:px-12 bg-black">
+        <div className="grid md:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
           <div>
-            <h3 className="text-4xl md:text-5xl font-light mb-12 leading-tight text-gray-200">
+            <h3 className="text-4xl md:text-5xl font-light mb-8 leading-tight text-gray-200">
               Analytical infrastructure<br />
               for the modeling<br />
               environment
             </h3>
-            <p className="text-gray-500 text-sm leading-relaxed mb-8 max-w-md">
+            <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-md">
               Our platform provides a comprehensive modeling environment designed for analyzing resilient communication infrastructure. The system enables simulation of complex network topologies and decoy behavior under various threat scenarios.
             </p>
-            <p className="text-gray-500 text-sm leading-relaxed mb-20 max-w-md">
+            <p className="text-gray-500 text-sm leading-relaxed mb-12 max-w-md">
               Advanced simulation logic processes network states in real-time, providing insights into signal routing, connection stability, and infrastructure resilience.
             </p>
 
-            <div className="flex gap-24 pt-8">
+            <div className="flex gap-16 pt-8">
               <div>
-                <p className="text-5xl font-light text-white">120+</p>
+                <p className="text-5xl font-light text-white"><Counter from={80} to={120} suffix="+" /></p>
                 <p className="text-[10px] text-gray-600 mt-4 tracking-[0.2em] uppercase font-bold">SCENARIOS</p>
               </div>
               <div>
-                <p className="text-5xl font-light text-white">5,000+</p>
+                <p className="text-5xl font-light text-white"><Counter from={3000} to={5000} suffix="+" /></p>
                 <p className="text-[10px] text-gray-600 mt-4 tracking-[0.2em] uppercase font-bold">NODES</p>
               </div>
               <div>
-                <p className="text-5xl font-light text-white">10K+</p>
+                <p className="text-5xl font-light text-white"><Counter from={5} to={10} suffix="K+" /></p>
                 <p className="text-[10px] text-gray-600 mt-4 tracking-[0.2em] uppercase font-bold">SIMULATIONS</p>
               </div>
             </div>
@@ -348,8 +369,8 @@ export default function Home() {
       </section>
 
       {/* Analytical Tools Grid */}
-      <section id="research" className="py-32 px-6 md:px-12 bg-[#080808]">
-        <div className="text-center mb-32">
+      <section id="research" className="py-24 px-6 md:px-12 bg-[#080808]">
+        <div className="text-center mb-20">
           <h3 className="text-xl font-medium tracking-[0.1em] text-gray-500 uppercase">ANALYTICAL TOOLS FOR RESILIENCE MODELING</h3>
         </div>
 
@@ -362,7 +383,7 @@ export default function Home() {
              { title: "Threat Scenario Builder", desc: "Construct and test adversarial engagement patterns" },
              { title: "Performance Analytics", desc: "Detailed throughput and latency profiling" }
            ].map((item, i) => (
-             <div key={i} className="bg-[#080808] p-12 hover:bg-zinc-900/30 transition-colors group min-h-[280px] flex flex-col justify-center">
+             <div key={i} className="bg-[#080808] p-8 hover:bg-zinc-900/30 transition-colors group min-h-[280px] flex flex-col justify-center">
                <h4 className="text-lg font-light text-gray-200 mb-4 group-hover:text-white transition-colors">{item.title}</h4>
                <p className="text-sm text-gray-600 leading-relaxed group-hover:text-gray-500">{item.desc}</p>
              </div>
@@ -371,19 +392,19 @@ export default function Home() {
       </section>
 
       {/* Team Section */}
-      <section id="team" className="py-40 px-6 md:px-12 bg-black">
-         <div className="text-center mb-24">
+      <section id="team" className="py-32 px-6 md:px-12 bg-black">
+         <div className="text-center mb-16">
           <h3 className="text-2xl font-medium tracking-[0.1em] text-gray-500 uppercase">TEAM</h3>
         </div>
         
-        <div className="flex justify-center gap-24 flex-wrap max-w-5xl mx-auto">
+        <div className="flex justify-center gap-16 flex-wrap max-w-5xl mx-auto">
            {[
              { name: "Dr. Elena Volkov", role: "Research Director" },
              { name: "James Mitchell", role: "Infrastructure Engineer" },
              { name: "Dr. Amir Hassan", role: "Security Analyst" }
            ].map((member, i) => (
              <div key={i} className="text-center group">
-               <div className="w-48 h-48 rounded-full bg-zinc-800 mb-8 mx-auto overflow-hidden relative border border-zinc-900 group-hover:border-zinc-700 transition-colors">
+               <div className="w-48 h-48 rounded-full bg-zinc-800 mb-6 mx-auto overflow-hidden relative border border-zinc-900 group-hover:border-zinc-700 transition-colors">
                   {/* Placeholder for team member photo */}
                </div>
                <p className="text-base font-light text-gray-300">{member.name}</p>
@@ -394,15 +415,15 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-32 px-6 md:px-12 bg-[#050505]">
-        <div className="grid md:grid-cols-2 gap-32 max-w-7xl mx-auto">
+      <section id="contact" className="py-24 px-6 md:px-12 bg-[#050505]">
+        <div className="grid md:grid-cols-2 gap-20 max-w-7xl mx-auto">
            <div>
-             <h3 className="text-5xl font-light mb-12 text-white">Contact</h3>
-             <p className="text-gray-500 text-sm mb-16 leading-relaxed max-w-md">
+             <h3 className="text-5xl font-light mb-8 text-white">Contact</h3>
+             <p className="text-gray-500 text-sm mb-10 leading-relaxed max-w-md">
                For institutional inquiries, partnership opportunities, or technical discussions regarding our decoy satellite infrastructure platform.
              </p>
              
-             <div className="space-y-8">
+             <div className="space-y-6">
                 <div>
                    <p className="text-[10px] uppercase tracking-widest text-gray-600 mb-2">INSTITUTIONAL EMAIL</p>
                    <p className="text-gray-300">contact@starlink-decoy.org</p>
@@ -415,7 +436,7 @@ export default function Home() {
            </div>
            
            <div className="pt-4">
-              <form className="space-y-12">
+              <form className="space-y-8">
                  <div>
                     <label className="block text-[10px] uppercase tracking-widest text-gray-600 mb-4">EMAIL ADDRESS</label>
                     <input type="email" className="w-full bg-[#0a0a0a] border border-zinc-900 p-4 text-sm focus:outline-none focus:border-zinc-700 transition-colors text-gray-300" />
@@ -430,7 +451,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-16 px-6 md:px-12 bg-black text-[10px] text-gray-700 flex flex-col md:flex-row justify-between items-center gap-6">
+      <footer className="py-12 px-6 md:px-12 bg-black text-[10px] text-gray-700 flex flex-col md:flex-row justify-between items-center gap-6">
         <p>&copy; 2024 Starlink Decoy Research Platform. Institutional use only.</p>
         <div className="flex gap-12">
           <a href="#" className="hover:text-gray-500 transition-colors">Privacy</a>
