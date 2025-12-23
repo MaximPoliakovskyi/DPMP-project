@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Download, Share2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Download, Share2, ChevronLeft, ChevronRight, Menu, X } from "lucide-react";
 import { motion, AnimatePresence, useInView, animate } from "framer-motion";
 
 const Counter = ({ from, to, suffix = "" }: { from: number; to: number; suffix?: string }) => {
@@ -65,6 +65,7 @@ const slides = [
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -78,6 +79,7 @@ export default function Home() {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
+      setIsMenuOpen(false);
     }
   };
 
@@ -94,6 +96,8 @@ export default function Home() {
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-6 md:px-12 bg-transparent mix-blend-difference">
         <div className="text-[10px] font-medium tracking-[0.2em] uppercase text-gray-400">STARLINK DECOY</div>
+        
+        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8 text-[10px] font-medium tracking-widest uppercase text-gray-400">
           <button onClick={() => scrollToSection("platform")} className="hover:text-white transition-colors">Platform</button>
           <button onClick={() => scrollToSection("architecture")} className="hover:text-white transition-colors">Architecture</button>
@@ -101,6 +105,29 @@ export default function Home() {
           <button onClick={() => scrollToSection("team")} className="hover:text-white transition-colors">Team</button>
           <button onClick={() => scrollToSection("contact")} className="hover:text-white transition-colors">Contact</button>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button className="md:hidden text-white z-50" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-0 left-0 right-0 bg-black border-b border-white/10 p-6 pt-24 flex flex-col gap-6 md:hidden"
+            >
+              <button onClick={() => scrollToSection("platform")} className="text-left text-sm uppercase tracking-widest text-gray-400 hover:text-white">Platform</button>
+              <button onClick={() => scrollToSection("architecture")} className="text-left text-sm uppercase tracking-widest text-gray-400 hover:text-white">Architecture</button>
+              <button onClick={() => scrollToSection("research")} className="text-left text-sm uppercase tracking-widest text-gray-400 hover:text-white">Research</button>
+              <button onClick={() => scrollToSection("team")} className="text-left text-sm uppercase tracking-widest text-gray-400 hover:text-white">Team</button>
+              <button onClick={() => scrollToSection("contact")} className="text-left text-sm uppercase tracking-widest text-gray-400 hover:text-white">Contact</button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Hero Section */}
@@ -170,7 +197,7 @@ export default function Home() {
                    {slides[currentSlide].title}
                 </h2>
 
-                <div className="grid grid-cols-3 gap-8 border-t border-white/10 pt-8 max-w-2xl">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/10 pt-8 max-w-2xl">
                    <div>
                       <p className="text-[10px] tracking-widest text-gray-500 uppercase mb-2">WRITTEN BY</p>
                       <p className="text-sm text-gray-300">{slides[currentSlide].author}</p>
@@ -235,7 +262,7 @@ export default function Home() {
         
         <div className="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto w-full">
           {/* Left Specs */}
-          <div className="space-y-16 text-left w-full md:w-1/4">
+          <div className="space-y-16 text-left w-full md:w-1/4 order-1 md:order-1">
              <div className="flex justify-between items-start group">
                <div>
                   <h4 className="text-sm text-gray-300 mb-2">Throughput</h4>
@@ -267,33 +294,33 @@ export default function Home() {
           </div>
 
           {/* Image Placeholder */}
-          <div className="relative w-full md:w-1/2 aspect-square md:aspect-[4/3] my-8 md:my-0 bg-zinc-800 rounded-lg">
+          <div className="relative w-full md:w-1/2 aspect-square md:aspect-[4/3] my-8 md:my-0 bg-zinc-800 rounded-lg order-2 md:order-2">
           </div>
 
           {/* Right Specs (Mirrored layout as per screenshot) */}
-          <div className="space-y-16 text-right w-full md:w-1/4">
-             <div className="flex justify-between items-start flex-row-reverse group">
+          <div className="space-y-16 text-left md:text-right w-full md:w-1/4 order-3 md:order-3">
+             <div className="flex justify-between items-start flex-row md:flex-row-reverse group">
                <div>
                   <h4 className="text-sm text-gray-300 mb-2">Throughput</h4>
                   <p className="text-xs text-gray-500">Up to 250 Mbps</p>
                </div>
                <span className="text-gray-700 text-xs">📶</span>
              </div>
-             <div className="flex justify-between items-start flex-row-reverse group">
+             <div className="flex justify-between items-start flex-row md:flex-row-reverse group">
                <div>
                   <h4 className="text-sm text-gray-300 mb-2">Signal latency</h4>
                   <p className="text-xs text-gray-500">Low, optimized for real-time</p>
                </div>
                <span className="text-gray-700 text-xs">⚡</span>
              </div>
-             <div className="flex justify-between items-start flex-row-reverse group">
+             <div className="flex justify-between items-start flex-row md:flex-row-reverse group">
                <div>
                   <h4 className="text-sm text-gray-300 mb-2">Connection stability</h4>
                   <p className="text-xs text-gray-500">Adaptive orbital routing</p>
                </div>
                <span className="text-gray-700 text-xs">📈</span>
              </div>
-             <div className="flex justify-between items-start flex-row-reverse group">
+             <div className="flex justify-between items-start flex-row md:flex-row-reverse group">
                <div>
                   <h4 className="text-sm text-gray-300 mb-2">Purpose</h4>
                   <p className="text-xs text-gray-500">Infrastructure analysis and modeling</p>
@@ -306,8 +333,8 @@ export default function Home() {
 
       {/* Analytical Infrastructure */}
       <section id="platform" className="py-24 px-6 md:px-12 bg-black">
-        <div className="grid md:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
+          <div className="order-1 md:order-1">
             <h3 className="text-4xl md:text-5xl font-light mb-8 leading-tight text-gray-200">
               Analytical infrastructure<br />
               for the modeling<br />
@@ -320,7 +347,7 @@ export default function Home() {
               Advanced simulation logic processes network states in real-time, providing insights into signal routing, connection stability, and infrastructure resilience.
             </p>
 
-            <div className="flex gap-16 pt-8">
+            <div className="flex flex-col sm:flex-row gap-16 pt-8">
               <div>
                 <p className="text-5xl font-light text-white"><Counter from={80} to={120} suffix="+" /></p>
                 <p className="text-[10px] text-gray-600 mt-4 tracking-[0.2em] uppercase font-bold">SCENARIOS</p>
@@ -330,13 +357,13 @@ export default function Home() {
                 <p className="text-[10px] text-gray-600 mt-4 tracking-[0.2em] uppercase font-bold">NODES</p>
               </div>
               <div>
-                <p className="text-5xl font-light text-white"><Counter from={5} to={10} suffix="K+" /></p>
+                <p className="text-5xl font-light text-white"><Counter from={5000} to={10000} suffix="+" /></p>
                 <p className="text-[10px] text-gray-600 mt-4 tracking-[0.2em] uppercase font-bold">SIMULATIONS</p>
               </div>
             </div>
           </div>
           
-          <div className="relative h-[600px] w-full flex items-center justify-center">
+          <div className="relative h-[400px] md:h-[600px] w-full flex items-center justify-center order-2 md:order-2">
              {/* Tree Graph Visualization */}
              <div className="relative w-full h-full opacity-40">
                 <div className="absolute top-1/4 left-1/2 w-2 h-2 bg-gray-500 rounded-full -translate-x-1/2"></div>
@@ -374,7 +401,7 @@ export default function Home() {
           <h3 className="text-xl font-medium tracking-[0.1em] text-gray-500 uppercase">ANALYTICAL TOOLS FOR RESILIENCE MODELING</h3>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-px bg-zinc-900 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-900 max-w-7xl mx-auto">
            {[
              { title: "Network Topology Modeling", desc: "Simulate complex satellite network configurations and orbital patterns" },
              { title: "Decoy Behavior Simulation", desc: "Model adversarial detection and response scenarios" },
@@ -416,7 +443,7 @@ export default function Home() {
 
       {/* Contact Section */}
       <section id="contact" className="py-24 px-6 md:px-12 bg-[#050505]">
-        <div className="grid md:grid-cols-2 gap-20 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 max-w-7xl mx-auto">
            <div>
              <h3 className="text-5xl font-light mb-8 text-white">Contact</h3>
              <p className="text-gray-500 text-sm mb-10 leading-relaxed max-w-md">
