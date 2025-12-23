@@ -1,7 +1,67 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Download, Share2, ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const slides = [
+  {
+    category: "Defense Reform",
+    title: "Strategic\nDefense\nReform",
+    author: "Strategy Unit",
+    date: "Sep 2024",
+    length: "8 min"
+  },
+  {
+    category: "Intelligence",
+    title: "Next-Gen\nIntelligence\nSystems",
+    author: "Intel Div",
+    date: "Oct 2024",
+    length: "10 min"
+  },
+  {
+    category: "Systems",
+    title: "Advanced\nSystems\nIntegration",
+    author: "Sys Admin",
+    date: "Nov 2024",
+    length: "15 min"
+  },
+  {
+    category: "Research",
+    title: "Future\nResearch\nInitiatives",
+    author: "R&D Team",
+    date: "Dec 2024",
+    length: "20 min"
+  },
+  {
+    category: "Infrastructure",
+    title: "Resilient\nCommunication\nInfrastructure",
+    author: "Research Team",
+    date: "Oct 2024",
+    length: "12 min"
+  }
+];
 
 export default function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [nextSlide]);
+
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black">
       {/* Navbar */}
@@ -35,11 +95,15 @@ export default function Home() {
       <section className="min-h-screen bg-[#050505] px-6 md:px-12 py-12 flex flex-col relative">
          {/* Tabs */}
          <div className="flex flex-wrap gap-8 mb-20 text-[11px] font-medium tracking-wide text-gray-500 uppercase border-b border-white/5 pb-4">
-            <button className="bg-white text-black px-4 py-2 -my-2">Defense Reform</button>
-            <button className="hover:text-white transition-colors py-2">Intelligence</button>
-            <button className="hover:text-white transition-colors py-2">Systems</button>
-            <button className="hover:text-white transition-colors py-2">Research</button>
-            <button className="hover:text-white transition-colors py-2">Infrastructure</button>
+            {slides.map((slide, index) => (
+              <button 
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`${currentSlide === index ? "bg-white text-black px-4 py-2 -my-2" : "hover:text-white transition-colors py-2"}`}
+              >
+                {slide.category}
+              </button>
+            ))}
          </div>
 
          <div className="flex-1 flex flex-col justify-center max-w-7xl mx-auto w-full">
@@ -55,33 +119,42 @@ export default function Home() {
                </div>
             </div>
 
-            <h2 className="text-5xl md:text-8xl font-medium leading-tight mb-24 tracking-tight">
-               Resilient<br />
-               Communication<br />
-               Infrastructure
-            </h2>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlide}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="mb-24"
+              >
+                <h2 className="text-5xl md:text-8xl font-medium leading-tight mb-24 tracking-tight whitespace-pre-line">
+                   {slides[currentSlide].title}
+                </h2>
 
-            <div className="grid grid-cols-3 gap-12 border-t border-white/10 pt-8 max-w-2xl">
-               <div>
-                  <p className="text-[10px] tracking-widest text-gray-500 uppercase mb-2">WRITTEN BY</p>
-                  <p className="text-sm text-gray-300">Research Team</p>
-               </div>
-               <div>
-                  <p className="text-[10px] tracking-widest text-gray-500 uppercase mb-2">PUBLISHED</p>
-                  <p className="text-sm text-gray-300">Oct 2024</p>
-               </div>
-               <div>
-                  <p className="text-[10px] tracking-widest text-gray-500 uppercase mb-2">LENGTH</p>
-                  <p className="text-sm text-gray-300">12 min</p>
-               </div>
-            </div>
+                <div className="grid grid-cols-3 gap-12 border-t border-white/10 pt-8 max-w-2xl">
+                   <div>
+                      <p className="text-[10px] tracking-widest text-gray-500 uppercase mb-2">WRITTEN BY</p>
+                      <p className="text-sm text-gray-300">{slides[currentSlide].author}</p>
+                   </div>
+                   <div>
+                      <p className="text-[10px] tracking-widest text-gray-500 uppercase mb-2">PUBLISHED</p>
+                      <p className="text-sm text-gray-300">{slides[currentSlide].date}</p>
+                   </div>
+                   <div>
+                      <p className="text-[10px] tracking-widest text-gray-500 uppercase mb-2">LENGTH</p>
+                      <p className="text-sm text-gray-300">{slides[currentSlide].length}</p>
+                   </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
          </div>
 
          {/* Slider Navigation */}
          <div className="absolute bottom-12 left-12 flex items-center gap-4 text-[10px] font-mono text-gray-500">
-            <ChevronLeft size={14} className="cursor-pointer hover:text-white transition-colors" />
-            <span>01 / 05</span>
-            <ChevronRight size={14} className="cursor-pointer hover:text-white transition-colors" />
+            <ChevronLeft size={14} className="cursor-pointer hover:text-white transition-colors" onClick={prevSlide} />
+            <span>0{currentSlide + 1} / 0{slides.length}</span>
+            <ChevronRight size={14} className="cursor-pointer hover:text-white transition-colors" onClick={nextSlide} />
          </div>
       </section>
 
@@ -146,6 +219,7 @@ export default function Home() {
                alt="Satellite" 
                fill
                className="object-contain drop-shadow-2xl"
+               unoptimized
              />
           </div>
 
