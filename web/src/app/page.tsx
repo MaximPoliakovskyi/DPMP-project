@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
 import { Download, Share2, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -220,15 +219,8 @@ export default function Home() {
              </div>
           </div>
 
-          {/* Image */}
-          <div className="relative w-full md:w-1/2 aspect-square md:aspect-[4/3] my-12 md:my-0">
-             <Image 
-               src="https://placehold.co/800x600/111/FFF?text=Satellite+Dish" 
-               alt="Satellite" 
-               fill
-               className="object-contain drop-shadow-2xl"
-               unoptimized
-             />
+          {/* Image Placeholder */}
+          <div className="relative w-full md:w-1/2 aspect-square md:aspect-[4/3] my-12 md:my-0 bg-zinc-800 rounded-lg">
           </div>
 
           {/* Right Specs (Mirrored layout as per screenshot) */}
@@ -365,7 +357,7 @@ export default function Home() {
              { name: "Dr. Amir Hassan", role: "Security Analyst" }
            ].map((member, i) => (
              <div key={i} className="text-center group">
-               <div className="w-48 h-48 rounded-full bg-[#0a0a0a] mb-8 mx-auto overflow-hidden relative border border-zinc-900 group-hover:border-zinc-700 transition-colors">
+               <div className="w-48 h-48 rounded-full bg-zinc-800 mb-8 mx-auto overflow-hidden relative border border-zinc-900 group-hover:border-zinc-700 transition-colors">
                   {/* Placeholder for team member photo */}
                </div>
                <p className="text-base font-light text-gray-300">{member.name}</p>
