@@ -353,7 +353,7 @@ export default function Home() {
           <h3 className="text-xl font-medium tracking-[0.1em] text-gray-500 uppercase">ANALYTICAL TOOLS FOR RESILIENCE MODELING</h3>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-px bg-zinc-900 border border-zinc-900 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-px bg-zinc-900 max-w-7xl mx-auto">
            {[
              { title: "Network Topology Modeling", desc: "Simulate complex satellite network configurations and orbital patterns" },
              { title: "Decoy Behavior Simulation", desc: "Model adversarial detection and response scenarios" },
