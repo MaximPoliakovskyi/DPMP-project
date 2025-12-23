@@ -53,6 +53,13 @@ export default function Home() {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   }, []);
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     const timer = setInterval(() => {
       nextSlide();
@@ -67,11 +74,11 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-6 md:px-12 bg-transparent mix-blend-difference">
         <div className="text-[10px] font-medium tracking-[0.2em] uppercase text-gray-400">STARLINK DECOY</div>
         <div className="hidden md:flex items-center gap-8 text-[10px] font-medium tracking-widest uppercase text-gray-400">
-          <a href="#" className="hover:text-white transition-colors">Platform</a>
-          <a href="#" className="hover:text-white transition-colors">Architecture</a>
-          <a href="#" className="hover:text-white transition-colors">Research</a>
-          <a href="#" className="hover:text-white transition-colors">Team</a>
-          <a href="#" className="hover:text-white transition-colors">Contact</a>
+          <button onClick={() => scrollToSection("platform")} className="hover:text-white transition-colors">Platform</button>
+          <button onClick={() => scrollToSection("architecture")} className="hover:text-white transition-colors">Architecture</button>
+          <button onClick={() => scrollToSection("research")} className="hover:text-white transition-colors">Research</button>
+          <button onClick={() => scrollToSection("team")} className="hover:text-white transition-colors">Team</button>
+          <button onClick={() => scrollToSection("contact")} className="hover:text-white transition-colors">Contact</button>
         </div>
       </nav>
 
@@ -84,14 +91,17 @@ export default function Home() {
           Decoy communication systems designed to improve infrastructure resilience
         </p>
         
-        <div className="absolute bottom-12 flex flex-col items-center gap-2 cursor-pointer group">
+        <div 
+          className="absolute bottom-12 flex flex-col items-center gap-2 cursor-pointer group"
+          onClick={() => scrollToSection("featured")}
+        >
            <span className="text-[10px] uppercase tracking-widest text-gray-500 group-hover:text-white transition-colors">Learn more</span>
            <span className="text-gray-500 group-hover:text-white transition-colors">↓</span>
         </div>
       </section>
 
       {/* Slider Section (Resilient Communication Infrastructure) */}
-      <section className="min-h-screen bg-[#050505] px-6 md:px-12 py-12 flex flex-col relative">
+      <section id="featured" className="min-h-screen bg-[#050505] px-6 md:px-12 py-12 flex flex-col relative">
          {/* Tabs */}
          <div className="flex flex-wrap gap-8 mb-20 text-[11px] font-medium tracking-wide text-gray-500 uppercase border-b border-white/5 pb-4">
             {slides.map((slide, index) => (
@@ -169,10 +179,26 @@ export default function Home() {
       <section className="py-40 px-6 md:px-12 flex justify-center bg-black">
         <div className="relative max-w-3xl text-center py-16 px-8">
           {/* Brackets decoration */}
-          <div className="absolute top-0 left-0 w-12 h-12 border-t border-l border-gray-600"></div>
-          <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-gray-600"></div>
-          <div className="absolute bottom-0 left-0 w-12 h-12 border-b border-l border-gray-600"></div>
-          <div className="absolute bottom-0 right-0 w-12 h-12 border-b border-r border-gray-600"></div>
+          <motion.div 
+            animate={{ x: [0, 15, 0], y: [0, 15, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-0 left-0 w-12 h-12 border-t border-l border-gray-600"
+          />
+          <motion.div 
+            animate={{ x: [0, -15, 0], y: [0, 15, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-0 right-0 w-12 h-12 border-t border-r border-gray-600"
+          />
+          <motion.div 
+            animate={{ x: [0, 15, 0], y: [0, -15, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-0 left-0 w-12 h-12 border-b border-l border-gray-600"
+          />
+          <motion.div 
+            animate={{ x: [0, -15, 0], y: [0, -15, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-0 right-0 w-12 h-12 border-b border-r border-gray-600"
+          />
           
           <p className="text-2xl md:text-4xl font-light text-gray-200 leading-relaxed tracking-wide">
             Our mission is to secure infrastructure by deploying high-fidelity decoy satellite networks.
@@ -181,7 +207,7 @@ export default function Home() {
       </section>
 
       {/* Specifications Section */}
-      <section className="py-20 px-6 md:px-12 bg-[#050505]">
+      <section id="architecture" className="py-20 px-6 md:px-12 bg-[#050505]">
         <div className="text-center mb-32">
           <h3 className="text-xl font-medium tracking-[0.1em] text-gray-500 uppercase">SPECIFICATIONS</h3>
         </div>
@@ -258,7 +284,7 @@ export default function Home() {
       </section>
 
       {/* Analytical Infrastructure */}
-      <section className="py-32 px-6 md:px-12 bg-black">
+      <section id="platform" className="py-32 px-6 md:px-12 bg-black">
         <div className="grid md:grid-cols-2 gap-24 items-center max-w-7xl mx-auto">
           <div>
             <h3 className="text-4xl md:text-5xl font-light mb-12 leading-tight text-gray-200">
@@ -322,7 +348,7 @@ export default function Home() {
       </section>
 
       {/* Analytical Tools Grid */}
-      <section className="py-32 px-6 md:px-12 bg-[#080808]">
+      <section id="research" className="py-32 px-6 md:px-12 bg-[#080808]">
         <div className="text-center mb-32">
           <h3 className="text-xl font-medium tracking-[0.1em] text-gray-500 uppercase">ANALYTICAL TOOLS FOR RESILIENCE MODELING</h3>
         </div>
@@ -345,7 +371,7 @@ export default function Home() {
       </section>
 
       {/* Team Section */}
-      <section className="py-40 px-6 md:px-12 bg-black">
+      <section id="team" className="py-40 px-6 md:px-12 bg-black">
          <div className="text-center mb-24">
           <h3 className="text-2xl font-medium tracking-[0.1em] text-gray-500 uppercase">TEAM</h3>
         </div>
@@ -368,7 +394,7 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section className="py-32 px-6 md:px-12 bg-[#050505]">
+      <section id="contact" className="py-32 px-6 md:px-12 bg-[#050505]">
         <div className="grid md:grid-cols-2 gap-32 max-w-7xl mx-auto">
            <div>
              <h3 className="text-5xl font-light mb-12 text-white">Contact</h3>
