@@ -94,7 +94,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black">
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-6 md:px-12 bg-transparent mix-blend-difference">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-6 md:px-12 bg-black/90 backdrop-blur-sm border-b border-white/5">
         <div className="text-[10px] font-medium tracking-[0.2em] uppercase text-gray-400">STARLINK DECOY</div>
         
         {/* Desktop Menu */}
@@ -151,22 +151,24 @@ export default function Home() {
       {/* Slider Section (Resilient Communication Infrastructure) */}
       <section id="featured" className="min-h-screen bg-[#050505] px-6 md:px-12 py-12 flex flex-col relative">
          {/* Tabs */}
-         <div className="flex flex-wrap gap-8 mb-12 text-[11px] font-medium tracking-wide text-gray-500 uppercase border-b border-white/5 pb-4">
+         <div className="flex flex-wrap gap-4 mb-12 text-[11px] font-medium tracking-wide text-gray-500 uppercase">
             {slides.map((slide, index) => (
               <button 
                 key={index}
                 onClick={() => setCurrentSlide(index)}
-                className={`relative py-2 transition-colors ${currentSlide === index ? "text-white" : "hover:text-white"}`}
+                className={`relative px-6 py-3 transition-colors overflow-hidden ${currentSlide === index ? "text-white" : "hover:text-white"}`}
               >
-                {slide.category}
                 {currentSlide === index && (
                   <motion.div
-                    className="absolute bottom-0 left-0 h-[1px] bg-white"
+                    className="absolute inset-0 bg-white z-0"
                     initial={{ width: "0%" }}
                     animate={{ width: "100%" }}
                     transition={{ duration: 7, ease: "linear" }}
                   />
                 )}
+                <span className={`relative z-10 ${currentSlide === index ? "mix-blend-difference" : ""}`}>
+                  {slide.category}
+                </span>
               </button>
             ))}
          </div>
